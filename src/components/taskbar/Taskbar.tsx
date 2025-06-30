@@ -1,8 +1,11 @@
+import './Taskbar.css';
+
 function Taskbar(props: { children: React.ReactElement[] }) {
     return (
         <div
             style={{
-                height: '80px',
+                userSelect: 'none',
+                height: '60px',
                 padding: '10px',
                 display: 'flex',
                 justifyContent: 'center',

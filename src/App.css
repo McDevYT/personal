@@ -10,5 +10,8 @@ body {
     height: 100vh;
     overflow: hidden;
     display: 'flex';
-    background-color: rgb(33, 182, 132);
+}
+
+html {
+    font-family: 'Inter', sans-serif;
 }

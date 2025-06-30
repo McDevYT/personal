@@ -1,0 +1,11 @@
+.background {
+    background: linear-gradient(160deg, rgb(24, 43, 78), rgb(4, 17, 39));
+}
+
+.backgroundText {
+    font-family: 'Inter', sans-serif;
+    font-size: 100px;
+    color: rgb(30, 245, 112);
+    user-select: none;
+    text-align: center;
+}

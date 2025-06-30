@@ -1,23 +1,41 @@
 import React, { useState, useRef } from 'react';
+import './Window.css';
 
 interface WindowProps {
     id: string;
     title: string;
     resizeable?: boolean;
     onClick: (id: string) => void;
+    onClose: (id: string) => void;
     children: React.ReactElement;
-    open: boolean;
+    position?: Position;
+    size?: Size;
 }
+
+const TRANSITIONS = {
+    OPEN: 'window-open',
+    CLOSE: 'window-close',
+    NONE: '',
+};
 
 type Position = { x: number; y: number };
 type Size = { width: number; height: number };
 
 const Window = (props: WindowProps) => {
-    const [size, setSize] = useState<Size>({ width: 300, height: 200 });
-    const [position, setPosition] = useState<Position>({
-        x: window.innerWidth / 2 - size.width / 2,
-        y: window.innerHeight / 2 - size.height / 2,
-    });
+    const windowRef = useRef<HTMLDivElement>(null);
+
+    const [size, setSize] = useState<Size>(
+        props.size ?? { width: 600, height: 400 }
+    );
+
+    const [position, setPosition] = useState<Position>(
+        props.position ?? {
+            x: window.innerWidth / 2 - size.width / 2,
+            y: window.innerHeight / 2 - size.height / 2,
+        }
+    );
+
+    const [transitionState, setTransitionState] = useState(TRANSITIONS.OPEN);
     const dragging = useRef(false);
     const resizing = useRef(false);
     const dragOffset = useRef<Position>({ x: 0, y: 0 });
@@ -60,10 +78,26 @@ const Window = (props: WindowProps) => {
         document.addEventListener('mouseup', handleMouseUp);
     };
 
+    const handleClose = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setTransitionState(TRANSITIONS.CLOSE);
+    };
+
+    const handleAnimationEnd = () => {
+        if (transitionState === TRANSITIONS.CLOSE) {
+            props.onClose(props.id);
+        }
+
+        setTransitionState(TRANSITIONS.NONE);
+    };
     return (
         <div
+            ref={windowRef}
+            className={`window ${transitionState}`}
             onMouseDown={() => props.onClick(props.id)}
+            onAnimationEnd={handleAnimationEnd}
             style={{
+                overflow: 'hidden',
                 position: 'absolute',
                 left: position.x,
                 top: position.y,
@@ -100,6 +134,8 @@ const Window = (props: WindowProps) => {
                     {props.title}
                 </p>
                 <div
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={handleClose}
                     style={{
                         width: '16px',
                         height: '16px',
@@ -111,7 +147,7 @@ const Window = (props: WindowProps) => {
                     }}
                 />
             </div>
-            <div style={{ flex: 1, padding: '10px' }}> {props.children}</div>
+            <div style={{ flex: 1 }}>{props.children}</div>
             {props.resizeable && (
                 <div
                     onMouseDown={handleResizeMouseDown}

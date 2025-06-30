@@ -1,0 +1,12 @@
+.taskbar-button:hover {
+    scale: 1.1;
+}
+
+.taskbar-button {
+    scale: 1;
+    transition: scale 0.1s;
+}
+
+.taskbar-button:active {
+    scale: 1;
+}

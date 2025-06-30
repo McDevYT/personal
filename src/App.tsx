@@ -3,72 +3,82 @@ import './App.css';
 import Taskbar from './components/taskbar/Taskbar';
 import Window from './components/window/Window';
 import { WindowModel } from './WindowModel';
-import Welcome from './windows/Welcome';
+import Welcome from './windows/welcome/Welcome.tsx';
 import TaskbarButton from './components/taskbar/TaskbarButton';
+import Background from './components/background/Background';
 
 function App() {
-    const [windows, setWindows] = useState<WindowModel[]>([
-        new WindowModel(
-            <div>2</div>,
-            '../public/icons/discord.png',
-            'd3',
-            false,
-            true
-        ),
-        new WindowModel(
-            <div>3</div>,
-            '../public/icons/discord.png',
-            'd4',
-            false,
-            true
-        ),
-        new WindowModel(
-            <div>4</div>,
-            '../public/icons/discord.png',
-            'd5',
-            false,
-            true
-        ),
-        new WindowModel(
-            <Welcome />,
-            '../public/icons/discord.png',
-            'Welcome',
-            true,
-            true
-        ),
+    const [windows] = useState<WindowModel[]>([
+        new WindowModel({
+            children: <div>2</div>,
+            taskbarIcon: '../icons/javascript.png',
+            title: 'd3',
+            resizeable: false,
+            open: false,
+        }),
+        new WindowModel({
+            children: <div>2</div>,
+            taskbarIcon: '../icons/javascript.png',
+            title: 'd3',
+            resizeable: false,
+            open: false,
+        }),
+        new WindowModel({
+            children: <div>2</div>,
+            taskbarIcon: '../icons/javascript.png',
+            title: 'd3',
+            resizeable: false,
+            open: false,
+        }),
+        new WindowModel({
+            children: <Welcome />,
+            taskbarIcon: '../icons/discord.png',
+            title: 'Welcome',
+            resizeable: true,
+            open: true,
+        }),
     ]);
 
+    const [windowsOrder, setWindowsOrder] = useState<string[]>(
+        windows.filter((window) => window.props.open).map((window) => window.id)
+    );
+
     const handleWindowClick = (id: string) => {
-        const window = windows.find((w) => w.id === id);
+        const filteredWindows = windowsOrder.filter((wid) => wid !== id);
+        setWindowsOrder([...filteredWindows, id]);
+    };
 
-        if (!window) return;
-
-        const filteredWindows = windows.filter((w) => w.id !== id);
-        window.open = true;
-        setWindows([...filteredWindows, window]);
+    const handleWindowClose = (id: string) => {
+        const filteredWindows = windowsOrder.filter((wid) => wid !== id);
+        setWindowsOrder(filteredWindows);
     };
 
     return (
         <div className="desktop">
-            {windows.map((window) => (
-                <Window
-                    key={window.id}
-                    title={window.title}
-                    id={window.id}
-                    resizeable={window.resizeable}
-                    onClick={handleWindowClick}
-                    open={window.open}
-                >
-                    {window.children}
-                </Window>
-            ))}
-            <Taskbar>
-                {windows.map((window) => (
-                    <TaskbarButton
-                        key={window.id}
+            <Background />
+            {windowsOrder.map((id) => {
+                const window = windows.find((w) => w.id === id);
+                if (!window) return;
+                return (
+                    <Window
+                        key={id}
+                        title={window.props.title}
                         id={window.id}
-                        icon={window.taskbarIcon}
-                        title={window.title}
+                        resizeable={window.props.resizeable}
+                        onClick={handleWindowClick}
+                        onClose={handleWindowClose}
+                    >
+                        {window.props.children}
+                    </Window>
+                );
+            })}
+            <Taskbar>
+                {windows.map((window, i) => (
+                    <TaskbarButton
+                        key={i}
+                        id={window.id}
+                        icon={window.props.taskbarIcon}
+                        title={window.props.title}
                         onClick={handleWindowClick}
                     />
                 ))}

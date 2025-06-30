@@ -1,0 +1,21 @@
+.window-open {
+    animation: open-close ease 0.3s both;
+}
+
+.window-close {
+    animation: open-close ease 0.3s both reverse;
+}
+
+@keyframes open-close {
+    0% {
+        scale: 0;
+    }
+
+    80% {
+        scale: 1.1;
+    }
+
+    100% {
+        scale: 1;
+    }
+}
