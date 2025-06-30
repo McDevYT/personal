@@ -6,36 +6,37 @@ import { WindowModel } from './WindowModel';
 import Welcome from './windows/welcome/Welcome.tsx';
 import TaskbarButton from './components/taskbar/TaskbarButton';
 import Background from './components/background/Background';
+import IFrame from './windows/iframe/IFrame.tsx';
 
 function App() {
     const [windows] = useState<WindowModel[]>([
-        new WindowModel({
-            children: <div>2</div>,
-            taskbarIcon: '../icons/javascript.png',
-            title: 'd3',
-            resizeable: false,
-            open: false,
-        }),
-        new WindowModel({
-            children: <div>2</div>,
-            taskbarIcon: '../icons/javascript.png',
-            title: 'd3',
-            resizeable: false,
-            open: false,
-        }),
-        new WindowModel({
-            children: <div>2</div>,
-            taskbarIcon: '../icons/javascript.png',
-            title: 'd3',
-            resizeable: false,
-            open: false,
-        }),
         new WindowModel({
             children: <Welcome />,
             taskbarIcon: '../icons/discord.png',
             title: 'Welcome',
             resizeable: true,
             open: true,
+        }),
+        new WindowModel({
+            children: <IFrame src="https://mcdevyt.com" />,
+            taskbarIcon: '../icons/mcdevyt.png',
+            title: 'mcdevyt.com',
+            resizeable: true,
+            open: false,
+        }),
+        new WindowModel({
+            children: <IFrame src="https://www.terminaltemple.com/" />,
+            taskbarIcon: '../icons/javascript.png',
+            title: 'Terminal',
+            resizeable: true,
+            open: false,
+        }),
+        new WindowModel({
+            children: <div>2</div>,
+            taskbarIcon: '../icons/javascript.png',
+            title: 'd3',
+            resizeable: false,
+            open: false,
         }),
     ]);
 
