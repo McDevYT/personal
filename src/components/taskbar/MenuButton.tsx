@@ -1,24 +1,6 @@
-import { useRef } from 'react';
-
-function MenuButton() {
-    const ref = useRef<HTMLDivElement>(null);
-
-    const handleClick = () => {
-        const el = ref.current;
-        if (!el) return;
-
-        el.classList.add('is-pressed');
-
-        const removeClass = () => {
-            el.classList.remove('is-pressed');
-            el.removeEventListener('animationend', removeClass);
-        };
-
-        el.addEventListener('animationend', removeClass);
-    };
+function MenuButton(props: { onClick: () => void }) {
     return (
         <div
-            ref={ref}
             className="taskbar-button"
             style={{
                 height: '100%',
@@ -30,14 +12,14 @@ function MenuButton() {
                 overflow: 'hidden',
                 cursor: 'pointer',
             }}
-            onClick={handleClick}
+            onClick={() => props.onClick()}
         >
             <img
                 style={{
                     width: '100%',
                     objectFit: 'fill',
                 }}
-                src={'../personal/icons/menu.svg'}
+                src={'./icons/menu.svg'}
             />
         </div>
     );

@@ -8,14 +8,12 @@
 
 @keyframes menu-open-close {
     0% {
-        scale: 0;
-    }
-
-    80% {
-        scale: 1.1;
+        opacity: 0;
+        transform: translate(-50%, -100px);
     }
 
     100% {
-        scale: 1;
+        opacity: 1;
+        transform: translate(-50%, -50%);
     }
 }

@@ -1,7 +1,10 @@
 import MenuButton from './MenuButton';
 import './Taskbar.css';
 
-function Taskbar(props: { children: React.ReactElement[] }) {
+function Taskbar(props: {
+    children: React.ReactElement[];
+    onOpenMenu: () => void;
+}) {
     return (
         <div
             style={{
@@ -23,7 +26,7 @@ function Taskbar(props: { children: React.ReactElement[] }) {
                 WebkitBackdropFilter: 'blur(10px)',
             }}
         >
-            <MenuButton />
+            <MenuButton onClick={() => props.onOpenMenu()} />
             {props.children}
         </div>
     );

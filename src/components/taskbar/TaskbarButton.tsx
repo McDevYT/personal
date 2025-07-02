@@ -8,19 +8,6 @@ function TaskbarButton(props: {
 }) {
     const ref = useRef<HTMLDivElement>(null);
 
-    const handleClick = () => {
-        const el = ref.current;
-        if (!el) return;
-
-        el.classList.add('is-pressed');
-        props.onClick(props.id);
-        const removeClass = () => {
-            el.classList.remove('is-pressed');
-            el.removeEventListener('animationend', removeClass);
-        };
-
-        el.addEventListener('animationend', removeClass);
-    };
     return (
         <div
             ref={ref}
@@ -36,7 +23,7 @@ function TaskbarButton(props: {
                 overflow: 'hidden',
                 cursor: 'pointer',
             }}
-            onClick={handleClick}
+            onClick={() => props.onClick(props.id)}
         >
             <img
                 style={{

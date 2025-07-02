@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Menu.css';
 
 const TRANSITIONS = {
@@ -7,37 +7,32 @@ const TRANSITIONS = {
     NONE: '',
 };
 
-function Menu() {
-    const [transitionState, setTransitionState] = useState(TRANSITIONS.CLOSE);
-
+function Menu(props: { open: boolean }) {
+    const { open } = props;
+    const [transitionState, setTransitionState] = useState(TRANSITIONS.NONE);
+    const [rendering, setRendering] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const [open] = useState(false);
-
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                menuRef.current &&
-                !menuRef.current.contains(event.target as Node)
-            ) {
-                setTransitionState(TRANSITIONS.CLOSE);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+        setRendering(true);
+        setTransitionState(open ? TRANSITIONS.OPEN : TRANSITIONS.CLOSE);
+    }, [open]);
+    useEffect(() => setRendering(false), []);
+    const onAnimationEnd = () => {
+        setTransitionState(TRANSITIONS.NONE);
+        setRendering(open);
+    };
 
     return (
-        open && (
+        rendering && (
             <div
+                onClick={(e) => e.stopPropagation()}
                 ref={menuRef}
                 className={`menu ${transitionState}`}
                 style={{
                     height: '50vh',
                     width: '50vw',
+                    zIndex: '11',
 
                     background: 'white',
                     padding: '20px',
@@ -47,6 +42,7 @@ function Menu() {
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                 }}
+                onAnimationEnd={onAnimationEnd}
             ></div>
         )
     );
