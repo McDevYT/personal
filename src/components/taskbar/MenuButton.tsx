@@ -37,7 +37,7 @@ function MenuButton() {
                     width: '100%',
                     objectFit: 'fill',
                 }}
-                src={'./personal/icons/menu.svg'}
+                src={'../personal/icons/menu.svg'}
             />
         </div>
     );
