@@ -105,9 +105,10 @@ const Window = (props: WindowProps) => {
                 height: size.height,
                 border: '2px solid #444',
                 background: '#fff',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                boxShadow: '4px 8px 2px rgba(0,0,0,0.4)',
                 display: 'flex',
                 flexDirection: 'column',
+                borderRadius: '8px',
             }}
         >
             <div

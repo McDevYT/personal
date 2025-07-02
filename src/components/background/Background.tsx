@@ -1,4 +1,5 @@
 import './Background.css';
+import Clock from './Clock';
 
 function Background() {
     return (
@@ -7,6 +8,7 @@ function Background() {
             style={{
                 position: 'absolute',
                 zIndex: '-1',
+                flexDirection: 'column',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -14,6 +16,7 @@ function Background() {
                 height: '100%',
             }}
         >
+            <Clock />
             <h1 className="backgroundText">Super Crazy Mega OS</h1>
         </div>
     );

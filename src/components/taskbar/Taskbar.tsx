@@ -1,3 +1,4 @@
+import MenuButton from './MenuButton';
 import './Taskbar.css';
 
 function Taskbar(props: { children: React.ReactElement[] }) {
@@ -22,6 +23,7 @@ function Taskbar(props: { children: React.ReactElement[] }) {
                 WebkitBackdropFilter: 'blur(10px)',
             }}
         >
+            <MenuButton />
             {props.children}
         </div>
     );
