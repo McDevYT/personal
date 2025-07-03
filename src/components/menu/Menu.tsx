@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react';
 import './Menu.css';
 
 const TRANSITIONS = {
@@ -7,7 +7,7 @@ const TRANSITIONS = {
     NONE: '',
 };
 
-function Menu(props: { open: boolean }) {
+function Menu(props: { open: boolean; children: JSX.Element[] | JSX.Element }) {
     const { open } = props;
     const [transitionState, setTransitionState] = useState(TRANSITIONS.NONE);
     const [rendering, setRendering] = useState<boolean>(false);
@@ -33,9 +33,8 @@ function Menu(props: { open: boolean }) {
                     height: '50vh',
                     width: '50vw',
                     zIndex: '11',
-
-                    background: 'white',
-                    padding: '20px',
+                    userSelect: 'none',
+                    padding: '40px',
                     borderRadius: '10px',
                     position: 'absolute',
                     top: '50%',
@@ -43,7 +42,19 @@ function Menu(props: { open: boolean }) {
                     transform: 'translate(-50%, -50%)',
                 }}
                 onAnimationEnd={onAnimationEnd}
-            ></div>
+            >
+                <div
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '20px',
+                    }}
+                >
+                    {props.children}
+                </div>
+            </div>
         )
     );
 }

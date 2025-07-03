@@ -6,6 +6,19 @@
     animation: open-close ease 0.3s both reverse;
 }
 
+.close-button:hover {
+    scale: 1.1;
+}
+
+.close-button {
+    scale: 1;
+    transition: scale 0.1s;
+}
+
+.close-button:active {
+    scale: 1;
+}
+
 @keyframes open-close {
     0% {
         scale: 0;

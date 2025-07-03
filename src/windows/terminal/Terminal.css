@@ -1,0 +1,21 @@
+.terminal-div {
+    background-color: rgb(9, 22, 41);
+
+    font-size: 100px;
+    font-weight: 500;
+}
+
+.terminal-textarea {
+    background: transparent;
+    resize: none;
+    border-radius: 0;
+    border: 0;
+    color: rgb(30, 245, 112);
+    scrollbar-width: none;
+}
+
+.terminal-textarea:focus {
+    outline: none;
+    border-color: initial;
+    box-shadow: none;
+}

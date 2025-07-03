@@ -13,6 +13,7 @@ function Background() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: '100%',
+                userSelect: 'none',
                 height: '100%',
             }}
         >

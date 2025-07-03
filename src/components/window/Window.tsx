@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './Window.css';
+import type { Size, Position } from '../../constants.ts';
 
 interface WindowProps {
     id: string;
@@ -17,9 +18,6 @@ const TRANSITIONS = {
     CLOSE: 'window-close',
     NONE: '',
 };
-
-type Position = { x: number; y: number };
-type Size = { width: number; height: number };
 
 const Window = (props: WindowProps) => {
     const windowRef = useRef<HTMLDivElement>(null);
@@ -134,21 +132,24 @@ const Window = (props: WindowProps) => {
                 >
                     {props.title}
                 </p>
-                <div
+                <img
+                    className="close-button"
+                    src="./icons/close.svg"
                     onMouseDown={(e) => e.stopPropagation()}
                     onClick={handleClose}
                     style={{
-                        width: '16px',
-                        height: '16px',
-                        background: '#444',
+                        width: '20px',
+                        height: '20px',
+                        background: 'rgb(185, 39, 39)',
                         cursor: 'pointer',
                         userSelect: 'none',
+                        borderRadius: '7px',
                         justifySelf: 'flex-end',
                         marginLeft: 'auto',
                     }}
                 />
             </div>
-            <div style={{ flex: 1 }}>{props.children}</div>
+            <div style={{ flex: 1, overflow: 'hidden' }}>{props.children}</div>
             {props.resizeable && (
                 <div
                     onMouseDown={handleResizeMouseDown}

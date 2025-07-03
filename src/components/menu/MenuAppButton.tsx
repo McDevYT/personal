@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-function TaskbarButton(props: {
+function MenuAppButton(props: {
     icon: string;
     title: string;
     onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -10,29 +10,30 @@ function TaskbarButton(props: {
     return (
         <div
             ref={ref}
-            className="taskbar-button"
             style={{
-                height: '100%',
                 aspectRatio: '1/1',
                 display: 'flex',
-                borderRadius: '20px',
                 alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
+                justifyContent: 'start',
+                flexDirection: 'column',
+                color: 'white',
                 cursor: 'pointer',
             }}
             onClick={(e) => props.onClick(e)}
         >
             <img
                 draggable="false"
+                className="menu-app-button"
                 style={{
-                    width: '100%',
+                    borderRadius: '10px',
+                    width: '70px',
                     objectFit: 'fill',
                 }}
                 src={props.icon}
             />
+            <p>{props.title}</p>
         </div>
     );
 }
 
-export default TaskbarButton;
+export default MenuAppButton;

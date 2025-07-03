@@ -7,9 +7,13 @@ import Welcome from './windows/welcome/Welcome.tsx';
 import TaskbarButton from './components/taskbar/TaskbarButton';
 import Background from './components/background/Background';
 import Menu from './components/menu/Menu.tsx';
+import MenuAppButton from './components/menu/MenuAppButton.tsx';
+import Terminal from './windows/terminal/Terminal.tsx';
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
+
+    const [taskbarButtonCount] = useState(4);
 
     const [windows] = useState<WindowModel[]>([
         new WindowModel({
@@ -21,9 +25,10 @@ function App() {
         }),
 
         new WindowModel({
-            children: <div>2</div>,
-            taskbarIcon: './icons/javascript.png',
-            title: 'd3',
+            children: <Terminal />,
+            taskbarIcon: './icons/terminal.png',
+            title: 'Terminal',
+            size: { width: 1000, height: 600 },
             resizeable: false,
             open: false,
         }),
@@ -57,22 +62,51 @@ function App() {
                         resizeable={window.props.resizeable}
                         onClick={handleWindowClick}
                         onClose={handleWindowClose}
+                        position={window.props.position}
+                        size={window.props.size}
                     >
                         {window.props.children}
                     </Window>
                 );
             })}
-            <Menu open={menuOpen} />
-            <Taskbar onOpenMenu={() => setMenuOpen(!menuOpen)}>
+            <Menu open={menuOpen}>
                 {windows.map((window, i) => (
-                    <TaskbarButton
+                    <MenuAppButton
                         key={i}
-                        id={window.id}
                         icon={window.props.taskbarIcon}
                         title={window.props.title}
-                        onClick={handleWindowClick}
+                        onClick={() => {
+                            handleWindowClick(window.id);
+
+                            setMenuOpen(false);
+                        }}
                     />
                 ))}
+            </Menu>
+            <Taskbar>
+                <>
+                    <TaskbarButton
+                        key={-1}
+                        icon={'./icons/menu.svg'}
+                        title={'Menu'}
+                        onClick={(e) => {
+                            setMenuOpen(!menuOpen);
+                            e.stopPropagation();
+                        }}
+                    />
+                    {windows.map((window, i) => {
+                        return (
+                            i < taskbarButtonCount && (
+                                <TaskbarButton
+                                    key={i}
+                                    icon={window.props.taskbarIcon}
+                                    title={window.props.title}
+                                    onClick={() => handleWindowClick(window.id)}
+                                />
+                            )
+                        );
+                    })}
+                </>
             </Taskbar>
         </div>
     );

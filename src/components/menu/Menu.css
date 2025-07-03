@@ -2,8 +2,25 @@
     animation: menu-open-close ease 0.3s both;
 }
 
+.menu {
+    background: rgb(6, 8, 31);
+}
+
 .menu-close {
-    animation: menu-open-close ease 0.3s both reverse;
+    animation: menu-open-close ease 0.15s both reverse;
+}
+
+.menu-app-button:hover {
+    scale: 1.1;
+}
+
+.menu-app-button {
+    scale: 1;
+    transition: scale 0.1s;
+}
+
+.menu-app-button:active {
+    scale: 1;
 }
 
 @keyframes menu-open-close {
