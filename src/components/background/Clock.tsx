@@ -16,7 +16,6 @@ function Clock() {
                     minute: '2-digit',
                 })
             );
-            console.log('time');
         }, 1000);
         return () => clearInterval(interval);
     }, []);

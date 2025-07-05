@@ -6,19 +6,59 @@ function Terminal() {
 Type 'help' to get started
 > `;
 
+    const commands: Record<string, (args: string[]) => void> = {
+        clear: (_args: string[]) => clear(),
+        echo: (args: string[]) => print(args.join(' ')),
+    };
+
+    function runCommand(input: string) {
+        const [cmd, ...args] = input.trim().split(/\s+/);
+        const command = commands[cmd];
+        if (command) {
+            command(args);
+        } else {
+            print(`Unknown command: ${cmd}`);
+        }
+    }
+
     const area = useRef<HTMLTextAreaElement>(null);
 
-    let currentInput = '';
-    const [value, setValue] = useState(startValue);
-    useEffect(() => {
-        area.current?.addEventListener('keydown', (event) => {
-            if (event.key.length === 1) {
-                currentInput += event.key;
-            }
-        });
-    });
+    const allowInput = true;
 
-    const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {};
+    const [history, setHistory] = useState(startValue);
+    const [currentInput, setCurrentInput] = useState('');
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                runCommand(currentInput);
+                event.preventDefault();
+            }
+        };
+
+        area?.current?.addEventListener('keydown', handleKeyDown);
+        return () =>
+            area.current?.removeEventListener('keydown', handleKeyDown);
+    }, [currentInput]);
+
+    const clear = () => {
+        setHistory('');
+        setCurrentInput('');
+    };
+
+    const print = (message: string) => {
+        const newHistory = history + message + '\n> ';
+        setHistory(newHistory);
+        setCurrentInput('');
+    };
+
+    const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        const text = e.target.value;
+        if (!allowInput || text.slice(0, history.length) !== history) return;
+
+        const input = text.slice(history.length);
+        setCurrentInput(input);
+    };
 
     return (
         <div
@@ -26,6 +66,7 @@ Type 'help' to get started
             style={{
                 width: '100%',
                 height: '100%',
+                overflow: 'hidden',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -35,8 +76,8 @@ Type 'help' to get started
                 ref={area}
                 className="terminal-textarea"
                 style={{ width: '100%', height: '100%' }}
-                onChange={(e) => handleOnChange(e)}
-                value={value + currentInput}
+                onChange={handleOnChange}
+                value={history + currentInput}
             />
         </div>
     );

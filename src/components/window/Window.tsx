@@ -149,7 +149,16 @@ const Window = (props: WindowProps) => {
                     }}
                 />
             </div>
-            <div style={{ flex: 1, overflow: 'hidden' }}>{props.children}</div>
+            <div
+                style={{
+                    flex: 1,
+                    overflow: 'hidden',
+                    padding: '0',
+                    margin: '0',
+                }}
+            >
+                {props.children}
+            </div>
             {props.resizeable && (
                 <div
                     onMouseDown={handleResizeMouseDown}
