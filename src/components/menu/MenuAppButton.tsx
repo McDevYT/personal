@@ -17,14 +17,15 @@ function MenuAppButton(props: {
                 justifyContent: 'start',
                 flexDirection: 'column',
                 color: 'white',
-                cursor: 'pointer',
             }}
-            onClick={(e) => props.onClick(e)}
         >
             <img
+                onClick={(e) => props.onClick(e)}
                 draggable="false"
                 className="menu-app-button"
                 style={{
+                    cursor: 'pointer',
+                    background: 'white',
                     borderRadius: '10px',
                     width: '70px',
                     objectFit: 'fill',

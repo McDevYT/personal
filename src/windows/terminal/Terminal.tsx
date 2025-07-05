@@ -1,12 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import './Terminal.css';
 
 function Terminal() {
-    const startValue = `Welcome to the Matrix Terminal
+    const startValue = `Welcome to the Terminal
 Type 'help' to get started
 > `;
 
-    const [input, setInput] = useState('');
+    const area = useRef<HTMLTextAreaElement>(null);
+
+    let currentInput = '';
+    const [value, setValue] = useState(startValue);
+    useEffect(() => {
+        area.current?.addEventListener('keydown', (event) => {
+            if (event.key.length === 1) {
+                currentInput += event.key;
+            }
+        });
+    });
+
+    const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {};
 
     return (
         <div
@@ -20,11 +32,12 @@ Type 'help' to get started
             }}
         >
             <textarea
+                ref={area}
                 className="terminal-textarea"
                 style={{ width: '100%', height: '100%' }}
-            >
-                {startValue}
-            </textarea>
+                onChange={(e) => handleOnChange(e)}
+                value={value + currentInput}
+            />
         </div>
     );
 }
