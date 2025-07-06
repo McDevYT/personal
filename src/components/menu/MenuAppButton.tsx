@@ -25,9 +25,8 @@ function MenuAppButton(props: {
                 className="menu-app-button"
                 style={{
                     cursor: 'pointer',
-                    background: 'white',
-                    borderRadius: '10px',
-                    width: '70px',
+                    borderRadius: 10,
+                    width: 70,
                     objectFit: 'fill',
                 }}
                 src={props.icon}

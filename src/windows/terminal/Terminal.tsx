@@ -1,54 +1,82 @@
-import { useEffect, useRef, useState, type ChangeEvent } from 'react';
+import { useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react';
 import './Terminal.css';
+import {
+    cowsay,
+    reverse,
+    roll,
+    shout,
+    time,
+    weather,
+} from '../../utils/TerminalCommands';
 
-function Terminal() {
-    const startValue = `Welcome to the Terminal
-Type 'help' to get started
-> `;
+interface TerminalProps {
+    ip?: string;
+}
+
+function Terminal(props: TerminalProps) {
+    const { ip } = props;
+
+    const startValue = `--------------------------------------------------
+          WELCOME TO TERMINAL SYSTEM v1.0
+--------------------------------------------------
+
+User: guest
+Host: ${ip ?? '122.223.565.111'}
+OS: Linux 5.15.0-70-generic
+
+Type 'help' to list available commands.
+ `;
 
     const commands: Record<string, (args: string[]) => void> = {
         clear: (_args: string[]) => clear(),
-        echo: (args: string[]) => print(args.join(' ')),
+        echo: (args: string[]) => printLine(args.join(' ')),
+        cowsay: (args: string[]) => printLine(cowsay(args.join(' '))),
+        home: (_args: string[]) => {
+            clear();
+            print(startValue);
+        },
+
+        roll: (args: string[]) => printLine(roll(args)),
+        reverse: (args: string[]) => printLine(reverse(args)),
+        shout: (args: string[]) => printLine(shout(args)),
+        time: (_args: string[]) => printLine(time()),
+        weather: (_args: string[]) => printLine(weather()),
     };
 
-    function runCommand(input: string) {
-        const [cmd, ...args] = input.trim().split(/\s+/);
-        const command = commands[cmd];
-        if (command) {
-            command(args);
-        } else {
-            print(`Unknown command: ${cmd}`);
-        }
-    }
-
     const area = useRef<HTMLTextAreaElement>(null);
-
-    const allowInput = true;
-
     const [history, setHistory] = useState(startValue);
     const [currentInput, setCurrentInput] = useState('');
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Enter') {
-                runCommand(currentInput);
-                event.preventDefault();
-            }
-        };
-
-        area?.current?.addEventListener('keydown', handleKeyDown);
-        return () =>
-            area.current?.removeEventListener('keydown', handleKeyDown);
-    }, [currentInput]);
+    const allowInput = true;
 
     const clear = () => {
         setHistory('');
         setCurrentInput('');
+        if (area.current) {
+            area.current.scrollTop = 0;
+        }
     };
 
-    const print = (message: string) => {
-        const newHistory = history + message + '\n> ';
-        setHistory(newHistory);
+    const printLine = (message: string = '') => {
+        setHistory((prev) => prev + message + '\n');
+    };
+    const print = (message: string = '') => {
+        setHistory((prev) => prev + message);
+    };
+
+    const runCommand = (input: string) => {
+        const [cmd, ...args] = input.trim().split(/\s+/);
+        const command = commands[cmd];
+
+        setHistory((prev) => prev + input);
+        printLine();
+        if (command) {
+            command(args);
+        } else {
+            printLine(`Unknown command: ${cmd}`);
+        }
+
+        print('guest@my-computer:~$ ');
         setCurrentInput('');
     };
 
@@ -60,23 +88,29 @@ Type 'help' to get started
         setCurrentInput(input);
     };
 
+    const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            runCommand(currentInput);
+        }
+        setTimeout(() => {
+            if (area.current) {
+                area.current.scrollTop = area.current.scrollHeight;
+            }
+        }, 0);
+    };
+
     return (
         <div
             className="terminal-div"
-            style={{
-                width: '100%',
-                height: '100%',
-                overflow: 'hidden',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}
+            style={{ width: '100%', height: '100%', overflow: 'hidden' }}
         >
             <textarea
                 ref={area}
                 className="terminal-textarea"
                 style={{ width: '100%', height: '100%' }}
                 onChange={handleOnChange}
+                onKeyDown={handleKeyDown}
                 value={history + currentInput}
             />
         </div>

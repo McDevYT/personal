@@ -9,6 +9,7 @@ import Background from './components/background/Background';
 import Menu from './components/menu/Menu.tsx';
 import MenuAppButton from './components/menu/MenuAppButton.tsx';
 import Terminal from './windows/terminal/Terminal.tsx';
+import { RandomIP4 } from './utils/RandomGenerator.ts';
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -18,15 +19,17 @@ function App() {
     const [windows] = useState<WindowModel[]>([
         new WindowModel({
             children: <Welcome />,
-            taskbarIcon: './icons/discord.png',
+            icon: './icons/discord.png',
             title: 'Welcome',
             resizeable: true,
             open: true,
+            hideInTaskbar: true,
+            hideInMenu: true,
         }),
 
         new WindowModel({
-            children: <Terminal />,
-            taskbarIcon: './icons/terminal.png',
+            children: <Terminal ip={RandomIP4()} />,
+            icon: './icons/terminal.svg',
             title: 'Terminal',
             size: { width: 1000, height: 600 },
             resizeable: false,
@@ -70,18 +73,20 @@ function App() {
                 );
             })}
             <Menu open={menuOpen}>
-                {windows.map((window, i) => (
-                    <MenuAppButton
-                        key={i}
-                        icon={window.props.taskbarIcon}
-                        title={window.props.title}
-                        onClick={() => {
-                            handleWindowClick(window.id);
+                {windows
+                    .filter((window) => !window.props.hideInMenu)
+                    .map((window, i) => (
+                        <MenuAppButton
+                            key={i}
+                            icon={window.props.icon}
+                            title={window.props.title}
+                            onClick={() => {
+                                handleWindowClick(window.id);
 
-                            setMenuOpen(false);
-                        }}
-                    />
-                ))}
+                                setMenuOpen(false);
+                            }}
+                        />
+                    ))}
             </Menu>
             <Taskbar>
                 <>
@@ -94,18 +99,22 @@ function App() {
                             e.stopPropagation();
                         }}
                     />
-                    {windows.map((window, i) => {
-                        return (
-                            i < taskbarButtonCount && (
-                                <TaskbarButton
-                                    key={i}
-                                    icon={window.props.taskbarIcon}
-                                    title={window.props.title}
-                                    onClick={() => handleWindowClick(window.id)}
-                                />
-                            )
-                        );
-                    })}
+                    {windows
+                        .filter((window) => !window.props.hideInTaskbar)
+                        .map((window, i) => {
+                            return (
+                                i < taskbarButtonCount && (
+                                    <TaskbarButton
+                                        key={i}
+                                        icon={window.props.icon}
+                                        title={window.props.title}
+                                        onClick={() =>
+                                            handleWindowClick(window.id)
+                                        }
+                                    />
+                                )
+                            );
+                        })}
                 </>
             </Taskbar>
         </div>
