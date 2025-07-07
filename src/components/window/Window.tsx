@@ -160,17 +160,19 @@ const Window = (props: WindowProps) => {
                 {props.children}
             </div>
             {props.resizeable && (
-                <div
+                <img
+                    src="./icons/handle.svg"
+                    draggable="false"
                     onMouseDown={handleResizeMouseDown}
                     style={{
-                        width: '16px',
-                        height: '16px',
-                        background: '#0078D7',
+                        padding: 3,
+                        width: '10px',
+                        height: '10px',
+                        color: 'gray',
                         position: 'absolute',
                         right: 0,
                         bottom: 0,
                         cursor: 'nwse-resize',
-
                         userSelect: 'none',
                     }}
                 />
