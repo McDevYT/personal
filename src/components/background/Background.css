@@ -9,3 +9,8 @@
     user-select: none;
     text-align: center;
 }
+
+.selector {
+    background: rgba(18, 180, 118, 0.3);
+    border: 3px solid rgba(21, 66, 49, 0.5);
+}

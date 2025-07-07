@@ -26,6 +26,7 @@ function Clock() {
                 color: 'white',
                 fontSize: '48px',
                 fontWeight: '600',
+                userSelect: 'none',
             }}
         >
             {time}
