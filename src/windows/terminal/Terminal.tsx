@@ -2,6 +2,8 @@ import { useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react';
 import './Terminal.css';
 import {
     cowsay,
+    help,
+    joke,
     reverse,
     roll,
     shout,
@@ -25,26 +27,29 @@ Host: ${ip ?? '122.223.565.111'}
 OS: Linux 5.15.0-70-generic
 
 Type 'help' to list available commands.
- `;
+`;
+
+    let user = 'guest@my-computer:~$ ';
 
     const commands: Record<string, (args: string[]) => void> = {
-        clear: (_args: string[]) => clear(),
-        echo: (args: string[]) => printLine(args.join(' ')),
-        cowsay: (args: string[]) => printLine(cowsay(args.join(' '))),
-        home: (_args: string[]) => {
+        clear: async () => clear(),
+        echo: async (args: string[]) => printLine(args.join(' ')),
+        cowsay: async (args: string[]) => printLine(cowsay(args.join(' '))),
+        home: async () => {
             clear();
             print(startValue);
         },
-
-        roll: (args: string[]) => printLine(roll(args)),
-        reverse: (args: string[]) => printLine(reverse(args)),
-        shout: (args: string[]) => printLine(shout(args)),
-        time: (_args: string[]) => printLine(time()),
-        weather: (_args: string[]) => printLine(weather()),
+        joke: async () => joke().then((joke) => printLine(joke)),
+        help: async () => printLine(help()),
+        roll: async (args: string[]) => printLine(roll(args)),
+        reverse: async (args: string[]) => printLine(reverse(args)),
+        shout: async (args: string[]) => printLine(shout(args)),
+        time: async () => printLine(time()),
+        weather: async () => printLine(weather()),
     };
 
     const area = useRef<HTMLTextAreaElement>(null);
-    const [history, setHistory] = useState(startValue);
+    const [history, setHistory] = useState(startValue + '\n' + user);
     const [currentInput, setCurrentInput] = useState('');
 
     const allowInput = true;
@@ -64,19 +69,19 @@ Type 'help' to list available commands.
         setHistory((prev) => prev + message);
     };
 
-    const runCommand = (input: string) => {
+    const runCommand = async (input: string) => {
         const [cmd, ...args] = input.trim().split(/\s+/);
         const command = commands[cmd];
 
         setHistory((prev) => prev + input);
         printLine();
         if (command) {
-            command(args);
+            await command(args);
         } else {
             printLine(`Unknown command: ${cmd}`);
         }
 
-        print('guest@my-computer:~$ ');
+        print(user);
         setCurrentInput('');
     };
 

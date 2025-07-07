@@ -40,16 +40,35 @@ export function cowsay(message: string) {
 export function help(): string {
     return `Available commands:
 
-  help       - Show this help message
+  help       - Show this help message.
   echo       - Make the console say something. Usage: echo <message>
   cowsay     - Make the cow say something. Usage: cowsay <message>
-  home       - Get to Terminal startscreen
+  home       - Get to Terminal startscreen.
+  time       - Shows the current time.
+  weather    - Shows the current weather.
+  shout      - Lets you shout things.
+  joke       - Tell a joke.
 
 Usage:
   Type a command followed by any necessary arguments.
   For example: cowsay Hello world!
 
 `;
+}
+
+export async function joke(): Promise<string> {
+    try {
+        const response = await fetch(
+            'https://official-joke-api.appspot.com/random_joke'
+        );
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return `${data.setup} - ${data.punchline}`;
+    } catch (error) {
+        return "I can't think of a joke right now.";
+    }
 }
 
 export function roll(args: string[]): string {
