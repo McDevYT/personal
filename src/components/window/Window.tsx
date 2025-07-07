@@ -134,7 +134,7 @@ const Window = (props: WindowProps) => {
                 </p>
                 <img
                     className="close-button"
-                    src="./icons/close.svg"
+                    src="./personal/icons/close.svg"
                     onMouseDown={(e) => e.stopPropagation()}
                     onClick={handleClose}
                     style={{
@@ -161,10 +161,11 @@ const Window = (props: WindowProps) => {
             </div>
             {props.resizeable && (
                 <img
-                    src="./icons/handle.svg"
+                    src="./personal/icons/handle.svg"
                     draggable="false"
                     onMouseDown={handleResizeMouseDown}
                     style={{
+                        opacity: '0.5',
                         padding: 3,
                         width: '10px',
                         height: '10px',

@@ -6,11 +6,11 @@ function Taskbar(props: { children: JSX.Element }) {
         <div
             style={{
                 userSelect: 'none',
-                height: '60px',
+                height: '50px',
                 padding: '10px',
                 display: 'flex',
                 justifyContent: 'center',
-                marginBottom: '20px',
+                marginBottom: '10px',
                 position: 'fixed',
                 bottom: '0',
                 left: '50%',

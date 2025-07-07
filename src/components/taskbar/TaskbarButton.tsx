@@ -15,7 +15,7 @@ function TaskbarButton(props: {
                 height: '100%',
                 aspectRatio: '1/1',
                 display: 'flex',
-                borderRadius: '20px',
+                borderRadius: '15px',
                 alignItems: 'center',
                 justifyContent: 'center',
                 overflow: 'hidden',

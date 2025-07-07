@@ -19,7 +19,7 @@ function App() {
     const [windows] = useState<WindowModel[]>([
         new WindowModel({
             children: <Welcome />,
-            icon: './icons/discord.png',
+            icon: './personal/icons/discord.png',
             title: 'Welcome',
             resizeable: true,
             open: true,
@@ -29,7 +29,7 @@ function App() {
 
         new WindowModel({
             children: <Terminal ip={RandomIP4()} />,
-            icon: './icons/terminal.svg',
+            icon: './personal/icons/terminal.svg',
             title: 'Terminal',
             size: { width: 1000, height: 600 },
             resizeable: false,
@@ -92,7 +92,7 @@ function App() {
                 <>
                     <TaskbarButton
                         key={-1}
-                        icon={'./icons/menu.svg'}
+                        icon={'./personal/icons/menu.svg'}
                         title={'Menu'}
                         onClick={(e) => {
                             setMenuOpen(!menuOpen);
