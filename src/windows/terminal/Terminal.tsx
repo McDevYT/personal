@@ -1,4 +1,10 @@
-import { useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react';
+import {
+    useEffect,
+    useRef,
+    useState,
+    type ChangeEvent,
+    type KeyboardEvent,
+} from 'react';
 import './Terminal.css';
 import {
     cowsay,
@@ -30,6 +36,12 @@ Type 'help' to list available commands.
 `;
 
     let user = 'guest@my-computer:~$ ';
+    const [inputHistory] = useState<string[]>([]);
+    const [inputIndex, setInputIndex] = useState(2);
+
+    useEffect(() => {
+        setCurrentInput(inputHistory[inputIndex] || '');
+    }, [inputIndex, inputHistory]);
 
     const commands: Record<string, (args: string[]) => void> = {
         clear: async () => clear(),
@@ -73,6 +85,9 @@ Type 'help' to list available commands.
         const [cmd, ...args] = input.trim().split(/\s+/);
         const command = commands[cmd];
 
+        inputHistory.push(input);
+        setInputIndex(inputHistory.length);
+
         setHistory((prev) => prev + input);
         printLine();
         if (command) {
@@ -93,11 +108,21 @@ Type 'help' to list available commands.
         setCurrentInput(input);
     };
 
-    const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            runCommand(currentInput);
+    const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (currentInput.trim()) runCommand(currentInput);
         }
+        if (e.key === 'ArrowUp') {
+            setInputIndex((prev) =>
+                Math.min(prev - 1, inputHistory.length - 1)
+            );
+            e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+            setInputIndex((prev) => Math.max(prev + 1, 0));
+            e.preventDefault();
+        }
+
         setTimeout(() => {
             if (area.current) {
                 area.current.scrollTop = area.current.scrollHeight;
